@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 18:55:28 by mouaammo          #+#    #+#             */
-/*   Updated: 2022/12/17 14:12:49 by mouaammo         ###   ########.fr       */
+/*   Updated: 2022/12/21 14:15:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	usage(void)
 {
-	ft_putstr_fd("Bad arguments\n", 1);
-	ft_putstr_fd("usage: ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2\n", 1);
+	ft_putstr_fd("Bad arguments\n", 2);
+	ft_putstr_fd("usage: ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2\n", 2);
 	exit(EXIT_FAILURE);
 }
 
@@ -58,7 +58,7 @@ void	process(int i, char **av, char **env, int *fd)
 	}
 	dup2(fd[0], 0);
 	close(fd[1]);
-	waitpid(pid, NULL, 0);
+	wait(NULL);
 }
 
 void	check_here_doc(int *i, int *out_fd, int ac, char **av)
@@ -74,9 +74,15 @@ void	check_here_doc(int *i, int *out_fd, int ac, char **av)
 	else
 	{
 		*i = 2;
-		in_fd = open_file(av[1], "infile");
-		*out_fd = open_file(av[ac - 1], "outfile");
+		in_fd = open(av[1], O_RDWR, 0777);
 		dup2(in_fd, 0);
+		*out_fd = open_file(av[ac - 1], "outfile");
+		if (in_fd == -1)
+		{
+			perror("");
+			*i = 3;
+			dup2(*out_fd, 0);
+		}
 		close(in_fd);
 	}
 }

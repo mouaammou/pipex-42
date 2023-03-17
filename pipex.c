@@ -6,11 +6,18 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:49:44 by mouaammo          #+#    #+#             */
-/*   Updated: 2022/12/17 14:12:58 by mouaammo         ###   ########.fr       */
+/*   Updated: 2022/12/21 14:17:15 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	usage(void)
+{
+	ft_putstr_fd("\n\033[31mBab arguments\033[0m\n", 2);
+	ft_putstr_fd("Usage: ./pipex infile <cmd1> <cmd2> outfile\n\n", 2);
+	exit(EXIT_FAILURE);
+}
 
 void	process(int i, char **av, char **env, int *fd)
 {
@@ -41,22 +48,21 @@ void	pipex(int ac, char **av, char **env)
 	i = 2;
 	in_file = open(av[1], O_RDONLY, 0777);
 	out_fd = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (in_file == -1 || out_fd == -1)
+	if (out_fd == -1)
 		error();
 	dup2(in_file, 0);
+	if (in_file == -1)
+	{
+		perror("");
+		i = ac -2;
+		dup2(out_fd, 0);
+	}
 	close(in_file);
 	while (i < ac - 2)
 		process(i++, av, env, fd);
 	dup2(out_fd, 1);
 	close(out_fd);
 	execute(env, av[ac - 2], fd);
-}
-
-void	usage(void)
-{
-	ft_putstr_fd("\n\033[31mBab arguments\033[0m\n", 1);
-	ft_putstr_fd("Usage: ./pipex infile <cmd1> <cmd2> outfile\n\n", 1);
-	exit(EXIT_FAILURE);
 }
 
 int	main(int ac, char **av, char **env)

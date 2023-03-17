@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 17:49:54 by mouaammo          #+#    #+#             */
-/*   Updated: 2022/12/17 13:34:22 by mouaammo         ###   ########.fr       */
+/*   Updated: 2022/12/20 21:20:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	open_file(char *file, char *type)
 		fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	else if (ft_strncmp(type, "here_doc", 8) == 0)
 		fd = open (file, O_RDWR | O_CREAT | O_APPEND, 0777);
-	if (fd < 0)
+	if (fd == -1)
 		error();
 	return (fd);
 }

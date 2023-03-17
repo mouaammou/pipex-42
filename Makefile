@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/14 17:53:07 by mouaammo          #+#    #+#              #
-#    Updated: 2022/12/17 13:50:20 by mouaammo         ###   ########.fr        #
+#    Updated: 2022/12/21 14:47:25 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,12 +38,14 @@ bonus: $(OBJ_BONUS)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
+	@$(MAKE) clean -C $(LIBFT)
 	@$(RM) $(OBJ) $(OBJ_BONUS)
 	@echo "--- Object files are Cleand."
 
 fclean: clean
+	@$(MAKE) fclean -C $(LIBFT)
 	@$(RM) $(NAME)
 	@echo "--- ALL Cleand."
 
 re: fclean all
-.PHONY: all fclean clean re bonus
+.PHONY: all fclean clean re bonus libft
